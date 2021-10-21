@@ -17,9 +17,6 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_welcomeFragment_to_houseSettingsFragment"
-            app:destination="@id/houseSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -27,12 +24,38 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_houseSettingsFragment"
-            app:destination="@id/houseSettingsFragment" />
+            android:id="@+id/action_registerFragment_to_modeFragment"
+            app:destination="@id/modeFragment" />
     </fragment>
     <fragment
         android:id="@+id/houseSettingsFragment"
         android:name="com.example.salvaagua.HouseSettingsFragment"
         android:label="fragment_house_settings"
         tools:layout="@layout/fragment_house_settings" />
+    <fragment
+        android:id="@+id/modeFragment"
+        android:name="com.example.salvaagua.ModeFragment"
+        android:label="fragment_mode"
+        tools:layout="@layout/fragment_mode" >
+        <action
+            android:id="@+id/action_modeFragment_to_houseSettingsFragment"
+            app:destination="@id/houseSettingsFragment" />
+        <action
+            android:id="@+id/action_modeFragment_to_manualHouseFragment"
+            app:destination="@id/manualHouseFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/houseHabitsFragment"
+        android:name="com.example.salvaagua.ManualSetupFragment"
+        android:label="fragment_house_habits"
+        tools:layout="@layout/fragment_house_habits" />
+    <fragment
+        android:id="@+id/manualHouseFragment"
+        android:name="com.example.salvaagua.ManualHouseFragment"
+        android:label="fragment_manual_house"
+        tools:layout="@layout/fragment_manual_house" >
+        <action
+            android:id="@+id/action_manualHouseFragment_to_manualSetupFragment2"
+            app:destination="@id/houseHabitsFragment" />
+    </fragment>
 </navigation>
