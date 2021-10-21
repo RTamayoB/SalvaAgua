@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "83395851315",
+    "project_id": "salva-agua",
+    "storage_bucket": "salva-agua.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83395851315:android:222d31cbe7af5cbc149f46",
+        "android_client_info": {
+          "package_name": "com.uag.salvaagua"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83395851315-98l5b814un6nakv1bmre0er97pnjti25.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbTI1ldbQPqUCo3_iZMTudqyKris7hwRw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83395851315-98l5b814un6nakv1bmre0er97pnjti25.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

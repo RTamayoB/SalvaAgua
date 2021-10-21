@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">SalvaAgua</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Error messages in RegisterForm -->
+    <string name="invalid_name">Nombre invalido</string>
+    <string name="invalid_lastname">Apellido invalido</string>
+    <string name="invalid_email">Correo invalido</string>
+    <string name="invalid_pass">Contraseña debe de ser mas de 5 caracteres</string>
+    <string name="invalid_confirm_password">Contraseñas no coinciden</string>
+    <!-- Save Text -->
+    <string name="action_save">Guardar</string>
+    <!-- House Settings Fragment -->
+    <string name="house_name_hint">Nombre de la casa</string>
+</resources>
