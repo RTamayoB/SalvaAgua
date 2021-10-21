@@ -166,7 +166,7 @@ class RegisterFragment : Fragment() {
                                 editor.putString("name", nameEdt.text.toString())
                                 editor.putString("last_name", lastNameEdt.text.toString())
                                 editor.apply()
-                                findNavController().navigate(R.id.action_registerFragment_to_houseSettingsFragment)
+                                findNavController().navigate(R.id.action_registerFragment_to_modeFragment)
                             }
                             .addOnFailureListener {
                                 Toast.makeText(context, "Error al registrarse",

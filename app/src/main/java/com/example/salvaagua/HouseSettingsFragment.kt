@@ -57,20 +57,17 @@ class HouseSettingsFragment : Fragment() {
 
         val roomsList = binding.roomsList
         val houseNameEdt = binding.houseNameEdt
-        val roofAreaEdt = binding.roofAreaEdt
 
         binding.saveHouseBtn.setOnClickListener {
             //TODO: Add roof_material (runoff) and precipitation level (location)
             val house: HashMap<String, Any> = HashMap()
             house["house_name"] = houseNameEdt.text.toString()
-            house["roof_area"] = roofAreaEdt.text.toString().toFloat()
             database.collection("houses")
                 .add(house)
                 .addOnSuccessListener {
                     val editor = housePreferences.edit()
                     editor.putString("house_id", it.id)
                     editor.putString("house_name", houseNameEdt.text.toString())
-                    editor.putString("roof_area", roofAreaEdt.text.toString())
                     editor.apply()
                     startActivity(Intent(requireActivity(), MainActivity::class.java))
                     requireActivity().finish()

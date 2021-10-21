@@ -92,6 +92,121 @@
                 android:ems="10"
                 android:inputType="number"
                 android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/hand_wash_times_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantas veces te lavas las manos al dia?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/hand_wash_times_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/hand_wash_minutes_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantos minutos te toma lavarte las manos?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/hand_wash_minutes_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/brush_times_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantas veces te cepillas los dientes al dia?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/brush_times_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/brush_minutes_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantos minutos te toma cepillarte los dientes?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/brush_minutes_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number"
+                android:minHeight="48dp" />
+
+            <TextView
+                android:id="@+id/dishes_times_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantas veces lavas los trastes al dia?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/dishes_times_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/dishes_minutes_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantos minutos te toma lavar los trastes?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/dishes_minutes_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/bathroom_times_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantas veces vas al baño al dia?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/bathroom_times_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
+
+            <TextView
+                android:id="@+id/bathroom_minutes_lbl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="¿Cuantos minutos te toma utilizar el baño?"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/bathroom_minutes_edt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="number" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

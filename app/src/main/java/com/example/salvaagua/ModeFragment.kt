@@ -53,11 +53,12 @@ class ModeFragment : Fragment() {
 
         binding.sensorlessModeBtn.setOnClickListener {
             housePreferences.edit().putBoolean("has_sensors", false).apply()
-
+            findNavController().navigate(R.id.action_modeFragment_to_manualHouseFragment)
         }
 
         binding.sensorModeBtn.setOnClickListener {
             housePreferences.edit().putBoolean("has_sensors", true).apply()
+            findNavController().navigate(R.id.action_modeFragment_to_houseSettingsFragment)
         }
     }
 

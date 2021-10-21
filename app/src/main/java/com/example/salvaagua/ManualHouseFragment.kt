@@ -1,10 +1,17 @@
 package com.example.salvaagua
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
+import com.example.salvaagua.databinding.FragmentManualHouseBinding
+import com.example.salvaagua.databinding.FragmentRegisterBinding
+import com.google.firebase.firestore.FirebaseFirestore
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,12 +28,22 @@ class ManualHouseFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private var _binding: FragmentManualHouseBinding? = null
+    private val binding get() = _binding!!
+
+    lateinit var housePreferences: SharedPreferences
+    lateinit var userPreferences: SharedPreferences
+    lateinit var database : FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+        housePreferences = requireActivity().getSharedPreferences("house", AppCompatActivity.MODE_PRIVATE)
+        userPreferences = requireActivity().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+        database = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(
@@ -34,7 +51,36 @@ class ManualHouseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_manual_house, container, false)
+        _binding = FragmentManualHouseBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.saveManualHouseBtn.setOnClickListener {
+            val editor = housePreferences.edit()
+            editor.putString("house_name", binding.houseNameEdt.text.toString())
+            editor.putFloat("roof_area", binding.roofAreaEdt.text.toString().toFloat())
+            editor.apply()
+
+            val houseData : MutableMap<String, Any> = HashMap()
+            houseData["user_id"] = userPreferences.getString("uid", "").toString()
+            houseData["has_sensors"] = housePreferences.getBoolean("has_sensors", false)
+            houseData["house_name"] = housePreferences.getString("house_name", "").toString()
+            houseData["roof_area"] = housePreferences.getFloat("roof_area", 0.0F)
+
+            database.collection("houses")
+                .add(houseData)
+                .addOnSuccessListener {
+                    findNavController().navigate(R.id.action_manualHouseFragment_to_houseHabitsFragment)
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Error al guardar datos de hogar",
+                        Toast.LENGTH_SHORT).show()
+                }
+
+        }
     }
 
     companion object {
@@ -55,5 +101,10 @@ class ManualHouseFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

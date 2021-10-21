@@ -55,7 +55,7 @@
         android:label="fragment_manual_house"
         tools:layout="@layout/fragment_manual_house" >
         <action
-            android:id="@+id/action_manualHouseFragment_to_manualSetupFragment2"
+            android:id="@+id/action_manualHouseFragment_to_houseHabitsFragment"
             app:destination="@id/houseHabitsFragment" />
     </fragment>
 </navigation>
