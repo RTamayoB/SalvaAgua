@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.salvaagua.data.repositories.RegisterRepository
 
 class RegisterViewModelFactory: ViewModelProvider.Factory {
-
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {

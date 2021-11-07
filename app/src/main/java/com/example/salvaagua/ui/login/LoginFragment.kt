@@ -1,5 +1,7 @@
 package com.example.salvaagua.ui.login
 
+import android.content.Intent
+import android.content.SharedPreferences
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.annotation.StringRes
@@ -15,10 +17,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
+import com.example.salvaagua.MainActivity
 import com.example.salvaagua.databinding.FragmentLoginBinding
 
 import com.example.salvaagua.R
+import com.example.salvaagua.SetupActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,9 +39,18 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     lateinit var auth : FirebaseAuth
 
+    lateinit var housePreferences: SharedPreferences
+    lateinit var startupPreferences: SharedPreferences
+    lateinit var userPreferences: SharedPreferences
+    lateinit var database : FirebaseFirestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
+        housePreferences = requireActivity().getSharedPreferences("house", AppCompatActivity.MODE_PRIVATE)
+        startupPreferences = requireActivity().getSharedPreferences("startup", AppCompatActivity.MODE_PRIVATE)
+        userPreferences = requireActivity().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+        database = FirebaseFirestore.getInstance()
     }
 
     override fun onCreateView(
@@ -126,8 +140,41 @@ class LoginFragment : Fragment() {
             )
             auth.signInWithEmailAndPassword(usernameEditText.text.toString(), passwordEditText.text.toString())
                 .addOnSuccessListener {
-                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                    val uid: String = it.user!!.uid
+                    startupPreferences.edit().putBoolean("register", true).apply()
+                    val editor = userPreferences.edit()
+                    database.collection("users").document(uid)
+                        .get()
+                        .addOnSuccessListener { user ->
+                            editor.putString("email", user.getString("email"))
+                            editor.putString("name", user.getString("name"))
+                            editor.putString("last_name", user.getString("last_name"))
+                            editor.apply()
+
+                            database.collection("houses")
+                                .whereEqualTo("user_id",uid)
+                                .get()
+                                .addOnSuccessListener { houses ->
+                                    val house = houses.documents[0]
+                                    val houseEditor = housePreferences.edit()
+                                    houseEditor.putString("house_name", house.getString("house_name"))
+                                    houseEditor.putString("location", house.getString("location"))
+                                    houseEditor.putFloat("roof_area", house.getDouble("roof_area")!!.toFloat())
+                                    houseEditor.putFloat("month_use", house.getDouble("month_use")!!.toFloat())
+                                    houseEditor.putInt("house_members", house.getDouble("house_members")!!.toInt())
+                                    houseEditor.apply()
+                                    findNavController().navigate(R.id.action_loginFragment_to_mainFragment)
+                                }
+                        }
+
+
                 }
+        }
+
+        binding.registerTxt.setOnClickListener {
+            startupPreferences.edit().putBoolean("register", false).apply()
+            startActivity(Intent(requireActivity(), SetupActivity::class.java))
+            requireActivity().finish()
         }
     }
 

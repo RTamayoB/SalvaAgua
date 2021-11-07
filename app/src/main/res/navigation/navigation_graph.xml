@@ -17,5 +17,14 @@
         android:id="@+id/mainFragment"
         android:name="com.example.salvaagua.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_registerActivityFragment"
+            app:destination="@id/registerActivityFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerActivityFragment"
+        android:name="com.example.salvaagua.RegisterActivityFragment"
+        android:label="fragment_register_activity"
+        tools:layout="@layout/fragment_register_activity" />
 </navigation>

@@ -37,6 +37,7 @@ class WelcomeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         startupPreferences = requireActivity().getSharedPreferences("startup", AppCompatActivity.MODE_PRIVATE)
+        requireActivity().title = "Bienvenido"
     }
 
     override fun onCreateView(
@@ -46,7 +47,7 @@ class WelcomeFragment : Fragment() {
         _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
 
         if(!startupPreferences.getBoolean("house_setup", true)){
-            findNavController().navigate(R.id.action_welcomeFragment_to_houseSettingsFragment)
+            findNavController().navigate(R.id.action_welcomeFragment_to_registerFragment)
         }
 
         binding.startBtn.setOnClickListener {

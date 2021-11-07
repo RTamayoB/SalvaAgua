@@ -37,6 +37,7 @@ class ModeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         housePreferences = requireActivity().getSharedPreferences("house", AppCompatActivity.MODE_PRIVATE)
+        requireActivity().title = "Seleccionar Modo"
     }
 
     override fun onCreateView(

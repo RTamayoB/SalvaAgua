@@ -45,17 +45,8 @@
             app:destination="@id/manualHouseFragment" />
     </fragment>
     <fragment
-        android:id="@+id/houseHabitsFragment"
-        android:name="com.example.salvaagua.ManualSetupFragment"
-        android:label="fragment_house_habits"
-        tools:layout="@layout/fragment_house_habits" />
-    <fragment
         android:id="@+id/manualHouseFragment"
         android:name="com.example.salvaagua.ManualHouseFragment"
         android:label="fragment_manual_house"
-        tools:layout="@layout/fragment_manual_house" >
-        <action
-            android:id="@+id/action_manualHouseFragment_to_houseHabitsFragment"
-            app:destination="@id/houseHabitsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_manual_house" />
 </navigation>
