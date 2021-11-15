@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
@@ -62,7 +63,6 @@ class RegisterActivityFragment : Fragment() {
         }
         userPreferences = requireActivity().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
         database = FirebaseFirestore.getInstance()
-        requireActivity().title = "Registrar Actividad"
     }
 
     override fun onCreateView(
@@ -72,6 +72,13 @@ class RegisterActivityFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentRegisterActivityBinding.inflate(inflater, container, false)
         binding.saveActivityProgressBar.isVisible = false
+
+        (activity as AppCompatActivity).supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        (activity as AppCompatActivity).supportActionBar?.setCustomView(R.layout.custom_action_bar)
+        val d = (activity as AppCompatActivity).supportActionBar?.customView as LinearLayout
+        val text = (d.getChildAt(0) as TextView)
+        text.text = "Registrar Actividad"
+
         return binding.root
     }
 

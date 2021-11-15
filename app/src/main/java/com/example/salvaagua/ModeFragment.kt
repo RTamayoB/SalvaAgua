@@ -6,6 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.salvaagua.databinding.FragmentModeBinding
@@ -37,7 +40,9 @@ class ModeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         housePreferences = requireActivity().getSharedPreferences("house", AppCompatActivity.MODE_PRIVATE)
-        requireActivity().title = "Seleccionar Modo"
+
+
+
     }
 
     override fun onCreateView(
@@ -46,6 +51,13 @@ class ModeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentModeBinding.inflate(inflater, container, false)
+
+        (activity as AppCompatActivity).supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        (activity as AppCompatActivity).supportActionBar?.setCustomView(R.layout.custom_action_bar)
+        val d = (activity as AppCompatActivity).supportActionBar?.customView as LinearLayout
+        val text = (d.getChildAt(0) as TextView)
+        text.text = "Seleccionar Modo"
+
         return binding.root
     }
 

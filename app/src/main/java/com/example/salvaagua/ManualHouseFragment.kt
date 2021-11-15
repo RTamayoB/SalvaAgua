@@ -9,7 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.example.salvaagua.databinding.FragmentManualHouseBinding
@@ -49,7 +52,6 @@ class ManualHouseFragment : Fragment() {
         housePreferences = requireActivity().getSharedPreferences("house", AppCompatActivity.MODE_PRIVATE)
         userPreferences = requireActivity().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
         database = FirebaseFirestore.getInstance()
-        requireActivity().title = "Datos del Hogar"
     }
 
     override fun onCreateView(
@@ -58,6 +60,13 @@ class ManualHouseFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentManualHouseBinding.inflate(inflater, container, false)
+
+        (activity as AppCompatActivity).supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        (activity as AppCompatActivity).supportActionBar?.setCustomView(R.layout.custom_action_bar)
+        val d = (activity as AppCompatActivity).supportActionBar?.customView as LinearLayout
+        val text = (d.getChildAt(0) as TextView)
+        text.text = "Datos del Hogar"
+
         return binding.root
     }
 

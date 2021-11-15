@@ -10,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -31,19 +30,22 @@ import com.example.salvaagua.util.WaterUseData
 import com.example.salvaagua.viewmodels.ChartsViewModel
 import com.example.salvaagua.viewmodels.ChartsViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
-import java.io.File
 import java.text.SimpleDateFormat
 import kotlin.collections.ArrayList
-import android.widget.Toast
-import java.io.FileOutputStream
-import java.io.IOException
 import android.content.pm.PackageManager
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.widget.*
+import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.scale
+import androidx.core.net.toUri
 import com.itextpdf.io.image.ImageData
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument
@@ -55,6 +57,8 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.property.TextAlignment
 import com.itextpdf.layout.property.UnitValue
+import java.io.*
+import java.net.URL
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -110,7 +114,6 @@ class MainFragment : Fragment() {
         userPreferences = requireActivity().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
         housePreferences = requireActivity().getSharedPreferences("house", AppCompatActivity.MODE_PRIVATE)
         database = FirebaseFirestore.getInstance()
-        requireActivity().title = "Salva Agua"
         Log.d("BMP", bmp.toString())
 
         if (checkPermission()) {
@@ -118,6 +121,12 @@ class MainFragment : Fragment() {
         } else {
             requestPermission();
         }
+
+        (activity as AppCompatActivity).supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        (activity as AppCompatActivity).supportActionBar?.setCustomView(R.layout.custom_action_bar)
+        val d = (activity as AppCompatActivity).supportActionBar?.customView as LinearLayout
+        val text = (d.getChildAt(0) as TextView)
+        text.text = "Salva Agua"
     }
 
     private fun checkPermission(): Boolean {
@@ -172,6 +181,10 @@ class MainFragment : Fragment() {
         _binding = FragmentMainBinding.inflate(inflater, container, false)
         registerUseFAB = binding.registerUseFab
         chartsTabLayout = binding.chartsTabLayout
+
+        val llm = LinearLayoutManager(requireActivity())
+        llm.orientation = LinearLayoutManager.VERTICAL
+        binding.activityRecyclerView.layoutManager = llm
 
         chartPagerAdapter = ChartPagerAdapter(this)
         binding.chartsViewPager.adapter = chartPagerAdapter
@@ -253,7 +266,8 @@ class MainFragment : Fragment() {
         chartsViewModel.waterUseLogByDate(today)
             .observe(requireActivity()) { logs ->
                 currentData = logs
-                pdfTitle = today.toString()
+                val titleParser = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(today)
+                pdfTitle = titleParser
                 if(logs.isEmpty()){
                     binding.activitiesLbl.visibility = View.GONE
                 }
@@ -284,10 +298,7 @@ class MainFragment : Fragment() {
                     val info = isOverUse(activity, data[0] as Int, data[1] as Int, data[2] as Float) as ArrayList<String>
                     items.add(ActivityItem(activity,data[2] as Float, info[0], info[1]))
                 }
-                val llm = LinearLayoutManager(requireActivity())
-                llm.orientation = LinearLayoutManager.VERTICAL
-                binding.activityRecyclerView.layoutManager = llm
-                binding.activityRecyclerView.adapter = ActivityAdapter(items)
+                binding.activityRecyclerView.adapter = ActivityAdapter(items, requireContext())
             }
     }
 
@@ -304,7 +315,9 @@ class MainFragment : Fragment() {
             endDate
         ).observe(requireActivity()) { logs ->
             currentData = logs
-            pdfTitle = "$startDate - $endDate"
+            val startParsed = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(startDate)
+            val endParsed = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(endDate)
+            pdfTitle = "$startParsed - $endParsed"
             if(logs.isEmpty()){
                 binding.activitiesLbl.visibility = View.GONE
             }
@@ -335,10 +348,8 @@ class MainFragment : Fragment() {
                 val info = isOverUse(activity, data[0] as Int, data[1] as Int, data[2] as Float) as ArrayList<String>
                 items.add(ActivityItem(activity,data[2] as Float, info[0], info[1]))
             }
-            val llm = LinearLayoutManager(requireActivity())
-            llm.orientation = LinearLayoutManager.VERTICAL
-            binding.activityRecyclerView.layoutManager = llm
-            binding.activityRecyclerView.adapter = ActivityAdapter(items)
+
+            binding.activityRecyclerView.adapter = ActivityAdapter(items, requireContext())
         }
     }
 
@@ -356,7 +367,7 @@ class MainFragment : Fragment() {
                     date.get(Calendar.YEAR).toString()
                 ).observe(requireActivity()) { logs ->
                     currentData = logs
-                    pdfTitle = date.get(Calendar.MONTH).toString()
+                    pdfTitle = "Mes ${date.get(Calendar.MONTH)}"
                     var total = 0.0
                     if(logs.isEmpty()){
                         binding.activitiesLbl.visibility = View.GONE
@@ -388,10 +399,8 @@ class MainFragment : Fragment() {
                         val info = isOverUse(activity, data[0] as Int, data[1] as Int, data[2] as Float) as ArrayList<String>
                         items.add(ActivityItem(activity,data[2] as Float, info[0], info[1]))
                     }
-                    val llm = LinearLayoutManager(requireActivity())
-                    llm.orientation = LinearLayoutManager.VERTICAL
-                    binding.activityRecyclerView.layoutManager = llm
-                    binding.activityRecyclerView.adapter = ActivityAdapter(items)
+
+                    binding.activityRecyclerView.adapter = ActivityAdapter(items, requireContext())
 
 
                     val percentage : Double = (precipitation / total) * 100
@@ -416,7 +425,7 @@ class MainFragment : Fragment() {
                     date.get(Calendar.YEAR).toString())
                     .observe(requireActivity()) { logs ->
                         currentData = logs
-                        pdfTitle = date.get(Calendar.YEAR).toString()
+                        pdfTitle = "Año ${date.get(Calendar.YEAR)}"
                         var total = 0.0
                         if(logs.isEmpty()){
                             binding.activitiesLbl.visibility = View.GONE
@@ -448,10 +457,7 @@ class MainFragment : Fragment() {
                             val info = isOverUse(activity, data[0] as Int, data[1] as Int, data[2] as Float) as ArrayList<String>
                             items.add(ActivityItem(activity,data[2] as Float, info[0], info[1]))
                         }
-                        val llm = LinearLayoutManager(requireActivity())
-                        llm.orientation = LinearLayoutManager.VERTICAL
-                        binding.activityRecyclerView.layoutManager = llm
-                        binding.activityRecyclerView.adapter = ActivityAdapter(items)
+                        binding.activityRecyclerView.adapter = ActivityAdapter(items, requireContext())
 
                         val percentage : Double = (precipitation / total) * 100
                         binding.catchmentLbl.text = "Este año, el agua de lluvia cubre"
@@ -610,20 +616,35 @@ class MainFragment : Fragment() {
             val pdfDocument = PdfDocument(PdfWriter(requireContext().getExternalFilesDir(null)!!.absolutePath+"/$pdfTitle"))
             val document = Document(pdfDocument)
 
+            val res = requireActivity().resources
+            val drawable = ResourcesCompat.getDrawable(res,R.drawable.app_logo_text,requireContext().theme)
+            val bitmap = (drawable as BitmapDrawable).bitmap
+            val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+            val finalBitmap = Bitmap.createScaledBitmap(mutableBitmap,160,80,false)
+            Log.d("Image Sizes", "Width:${mutableBitmap.width} - Height:${mutableBitmap.height}")
 
-            val name = Paragraph("SalvaAgua").setTextAlignment(TextAlignment.LEFT)
-            document.add(name)
+            val stream = ByteArrayOutputStream()
+            finalBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val bitMapData = stream.toByteArray()
+            val imageData = ImageDataFactory.create(bitMapData)
+            val img = Image(imageData)
+            img.setTextAlignment(TextAlignment.RIGHT)
+            document.add(img)
+            //val name = Paragraph("Salva Agua").setTextAlignment(TextAlignment.CENTER)
+            //document.add(name)
             val title = Paragraph(pdfTitle).setTextAlignment(TextAlignment.LEFT)
             document.add(title)
 
             val table = Table(UnitValue.createPercentArray(floatArrayOf(30f, 30f, 10f, 10f))).useAllAvailableWidth()
-            table.addHeaderCell(Cell().add(Paragraph("Fecha").setTextAlignment(TextAlignment.CENTER)))
-            table.addHeaderCell(Cell().add(Paragraph("Actividad").setTextAlignment(TextAlignment.CENTER)))
-            table.addHeaderCell(Cell().add(Paragraph("Minutos").setTextAlignment(TextAlignment.CENTER)))
-            table.addHeaderCell(Cell().add(Paragraph("Agua usada").setTextAlignment(TextAlignment.CENTER)))
+            table.addHeaderCell(Cell().add(Paragraph("Fecha").setTextAlignment(TextAlignment.CENTER).setBold()))
+            table.addHeaderCell(Cell().add(Paragraph("Actividad").setTextAlignment(TextAlignment.CENTER).setBold()))
+            table.addHeaderCell(Cell().add(Paragraph("Minutos").setTextAlignment(TextAlignment.CENTER).setBold()))
+            table.addHeaderCell(Cell().add(Paragraph("Agua").setTextAlignment(TextAlignment.CENTER).setBold()))
 
             for (log in logs){
-                table.addCell(Cell().add(Paragraph(log.date.toString()).setTextAlignment(TextAlignment.CENTER)))
+                val dateParsed = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault()).format(log.date!!)
+
+                table.addCell(Cell().add(Paragraph(dateParsed).setTextAlignment(TextAlignment.CENTER)))
                 table.addCell(Cell().add(Paragraph(log.activity).setTextAlignment(TextAlignment.CENTER)))
                 table.addCell(Cell().add(Paragraph(log.minutes.toString()).setTextAlignment(TextAlignment.CENTER)))
                 table.addCell(Cell().add(Paragraph(log.waterUsed.toString()).setTextAlignment(TextAlignment.CENTER)))
@@ -648,6 +669,18 @@ class MainFragment : Fragment() {
         }catch (e: Exception){
             Log.d("Error Creating Pdf", e.toString())
         }
+    }
+
+    @Throws(IOException::class)
+    fun getImage(url: URL): ByteArray? {
+        val baos = ByteArrayOutputStream()
+        val `is`: InputStream = url.openStream()
+        val b = ByteArray(4096)
+        var n: Int
+        while (`is`.read(b).also { n = it } > -1) {
+            baos.write(b, 0, n)
+        }
+        return baos.toByteArray()
     }
 
     companion object {

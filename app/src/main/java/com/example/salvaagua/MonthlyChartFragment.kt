@@ -69,14 +69,6 @@ class MonthlyChartFragment : Fragment() {
                 "¡Comienze a registrar su uso \\n\\n" +
                 "agregando una actividad!")
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        //Get the data for the week (current day + six days) and plot it in a stacked bar chart
-        //with a line
-
         val date = Calendar.getInstance()
         val titleFormat = SimpleDateFormat("MMMM", Locale.getDefault())
         val unformatTitle = titleFormat.format(date.time).toString()
@@ -88,47 +80,56 @@ class MonthlyChartFragment : Fragment() {
             date.get(Calendar.YEAR).toString()
         ).observe(requireActivity()) { monthLogs ->
             if(monthLogs.isNotEmpty()){
-                    var shower = 0.0
-                    var wc = 0.0
-                    var hands = 0.0
-                    var brush = 0.0
-                    var shave = 0.0
-                    var dishes = 0.0
-                    var car = 0.0
-                    var plants = 0.0
-                    Log.d("Month Chart Qty", monthLogs.size.toString())
-                    for (i in monthLogs.indices) {
-                        val log = monthLogs[i]
-                        when (log.activity) {
-                            "Bañarse" -> shower += log.waterUsed
-                            "Usar el retrete" -> wc += log.waterUsed
-                            "Lavarse las manos" -> hands += log.waterUsed
-                            "Cepillarse los dientes" -> brush += log.waterUsed
-                            "Afeitarse" -> shave += log.waterUsed
-                            "Lavar los trastes" -> dishes += log.waterUsed
-                            "Lavar el coche" -> car += log.waterUsed
-                            "Regar plantas" -> plants += log.waterUsed
-                            else -> {
-                                //Do nothing
-                            }
+                var shower = 0.0
+                var wc = 0.0
+                var hands = 0.0
+                var brush = 0.0
+                var shave = 0.0
+                var dishes = 0.0
+                var car = 0.0
+                var plants = 0.0
+                Log.d("Month Chart Qty", monthLogs.size.toString())
+                for (i in monthLogs.indices) {
+                    val log = monthLogs[i]
+                    when (log.activity) {
+                        "Bañarse" -> shower += log.waterUsed
+                        "Usar el retrete" -> wc += log.waterUsed
+                        "Lavarse las manos" -> hands += log.waterUsed
+                        "Cepillarse los dientes" -> brush += log.waterUsed
+                        "Afeitarse" -> shave += log.waterUsed
+                        "Lavar los trastes" -> dishes += log.waterUsed
+                        "Lavar el coche" -> car += log.waterUsed
+                        "Regar plantas" -> plants += log.waterUsed
+                        else -> {
+                            //Do nothing
                         }
                     }
-                    val dailyData = arrayListOf<DataEntry>()
-                    dailyData.add(ValueDataEntry("Bañarse", shower / 1000))
-                    dailyData.add(ValueDataEntry("Usar el retrete", wc / 1000))
-                    dailyData.add(ValueDataEntry("Lavarse las manos", hands / 1000))
-                    dailyData.add(ValueDataEntry("Cepillarse los dientes", brush / 1000))
-                    dailyData.add(ValueDataEntry("Afeitarse", shave / 1000))
-                    dailyData.add(ValueDataEntry("Lavar los trastes", dishes / 1000))
-                    dailyData.add(ValueDataEntry("Lavar el coche", car / 1000))
-                    dailyData.add(ValueDataEntry("Regar plantas", plants / 1000))
-                    pie.container("container")
-                    monthlySet.data(dailyData)
-                    val daylySeriesData = monthlySet.mapAs("{ x: 'x', value: 'value' }")
-                    pie.data(daylySeriesData)
                 }
+                val dailyData = arrayListOf<DataEntry>()
+                dailyData.add(ValueDataEntry("Bañarse", shower / 1000))
+                dailyData.add(ValueDataEntry("Usar el retrete", wc / 1000))
+                dailyData.add(ValueDataEntry("Lavarse las manos", hands / 1000))
+                dailyData.add(ValueDataEntry("Cepillarse los dientes", brush / 1000))
+                dailyData.add(ValueDataEntry("Afeitarse", shave / 1000))
+                dailyData.add(ValueDataEntry("Lavar los trastes", dishes / 1000))
+                dailyData.add(ValueDataEntry("Lavar el coche", car / 1000))
+                dailyData.add(ValueDataEntry("Regar plantas", plants / 1000))
+                pie.container("container")
+                monthlySet.data(dailyData)
+                val daylySeriesData = monthlySet.mapAs("{ x: 'x', value: 'value' }")
+                pie.data(daylySeriesData)
             }
+        }
         binding.monthlyChart.setChart(pie)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        //Get the data for the week (current day + six days) and plot it in a stacked bar chart
+        //with a line
+
     }
 
     companion object {

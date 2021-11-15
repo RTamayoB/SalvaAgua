@@ -15,7 +15,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/nexa_bold"
-        android:text="¿Como quieres que calculemos tu uso de agua?"
+        android:text="¿Cómo desea que calculemos tu uso de agua?"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

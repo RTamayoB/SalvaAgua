@@ -6,9 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.fragment.findNavController
 import com.example.salvaagua.databinding.FragmentWelcomeBinding
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,7 +44,6 @@ class WelcomeFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         startupPreferences = requireActivity().getSharedPreferences("startup", AppCompatActivity.MODE_PRIVATE)
-        requireActivity().title = "Bienvenido"
     }
 
     override fun onCreateView(
@@ -53,6 +59,12 @@ class WelcomeFragment : Fragment() {
         binding.startBtn.setOnClickListener {
             findNavController().navigate(R.id.action_welcomeFragment_to_registerFragment)
         }
+
+        (activity as AppCompatActivity).supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        (activity as AppCompatActivity).supportActionBar?.setCustomView(R.layout.custom_action_bar)
+        val d = (activity as AppCompatActivity).supportActionBar?.customView as LinearLayout
+        val text = (d.getChildAt(0) as TextView)
+        text.text = "Salva Agua"
 
         return binding.root
     }

@@ -1,5 +1,6 @@
 package com.example.salvaagua
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +10,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.salvaagua.data.entities.WaterUseLog
 
-class ActivityAdapter(private val dataSet: List<ActivityItem>):
+class ActivityAdapter(private val dataSet: List<ActivityItem>, val context: Context):
     RecyclerView.Adapter<ActivityAdapter.ViewHolder>() {
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -35,7 +36,7 @@ class ActivityAdapter(private val dataSet: List<ActivityItem>):
             holder.useLevelTxt.setTextColor(Color.RED)
         }
         else{
-            holder.useLevelTxt.setTextColor(Color.GREEN)
+            holder.useLevelTxt.setTextColor(context.resources.getColor(R.color.green))
         }
         holder.adviceTxt.isVisible = false
         if(dataSet[position].advice != ""){

@@ -163,7 +163,7 @@ class WeeklyChartFragment : Fragment() {
                 setupSeriesLabels(series, "Regar plantas")
 
                 val xAxis = cartesian.xAxis(0)
-                xAxis.title("Meses")
+                xAxis.title("Dias")
 
                 val yAxis = cartesian.yAxis(0)
                 yAxis.title("Metros Cúbicos")
